@@ -13,8 +13,8 @@ import { Routes, Route } from 'react-router-dom';
 const App = () => {
   return (
     <main>
+      <AppBar />
       <Container>
-        <AppBar />
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/community' element={<Community />} />
