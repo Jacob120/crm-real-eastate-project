@@ -23,12 +23,14 @@ import AccountBalanceOutlinedIcon from '@material-ui/icons/AccountBalanceOutline
 import BuildOutlinedIcon from '@material-ui/icons/BuildOutlined';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import GavelOutlinedIcon from '@material-ui/icons/GavelOutlined';
-import { NavLink } from 'react-router-dom';
 import { Drawer, DrawerHeader, AppBar } from './AppBarStyles';
+import { useNavigate } from 'react-router-dom';
 
 const AppBarDrawer = () => {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  let navigate = useNavigate();
+  const [open, setOpen] = React.useState(true);
+
   const drawerCategories = {
     adminDrawerCategories: [
       {
@@ -108,7 +110,17 @@ const AppBarDrawer = () => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Drawer variant='permanent' open={open}>
+      <Drawer
+        variant='permanent'
+        open={open}
+        sx={{
+          '& .MuiDrawer-paper': { backgroundColor: '#1976d2' },
+          '& .Mui-selected': {
+            color: 'red',
+          },
+          '& .MuiSvgIcon-root': { color: 'white' },
+        }}
+      >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? (
@@ -121,37 +133,12 @@ const AppBarDrawer = () => {
         <Divider />
         <List>
           {drawerCategories.adminDrawerCategories.map((category, index) => (
-            <NavLink to={category.url} key={category.id}>
-              <ListItem disablePadding sx={{ display: 'block' }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {category.icon}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={category.name}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            </NavLink>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+            <ListItem
+              disablePadding
+              sx={{ display: 'block' }}
+              key={category.id}
+              onClick={() => navigate(category.url)}
+            >
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -164,12 +151,17 @@ const AppBarDrawer = () => {
                     minWidth: 0,
                     mr: open ? 3 : 'auto',
                     justifyContent: 'center',
+                    color: 'white',
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {category.icon}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText
+                  primary={category.name}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
               </ListItemButton>
+              <Divider />
             </ListItem>
           ))}
         </List>
