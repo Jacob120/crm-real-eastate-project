@@ -7,6 +7,9 @@ import {
 } from '@mui/x-data-grid';
 import { Typography } from '@material-ui/core';
 import { StripedDataGrid } from './CommunityTable.styles';
+import { Button } from '@mui/material';
+import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
+import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
 
 const columns: GridColDef[] = [
   {
@@ -132,11 +135,19 @@ const DataGridDemo = () => {
         },
       }}
     >
-      <Box sx={{ marginBottom: 5 }}>
-        <Typography variant='h4' component='h4'>
+      <Box sx={{ marginBottom: 3 }}>
+        <Typography variant='h5' component='h5'>
           Właściciele we wspólnocie
         </Typography>
       </Box>
+      <Button>
+        <NoteAddOutlinedIcon />
+        Dodaj właściciela
+      </Button>
+      <Button>
+        <RefreshOutlinedIcon />
+        Odśwież listę
+      </Button>
       <StripedDataGrid
         rows={rows}
         columns={columns}
