@@ -118,7 +118,7 @@ const rows = [
   },
 ];
 
-const DataGridDemo = () => {
+const DataGrid = () => {
   return (
     <Box
       sx={{
@@ -131,7 +131,7 @@ const DataGridDemo = () => {
           backgroundColor: '#e8e8e8',
         },
         '& .MuiDataGrid-columnSeparator--sideRight': {
-          color: '#808080',
+          color: '#888888',
         },
       }}
     >
@@ -175,4 +175,4 @@ const DataGridDemo = () => {
   );
 };
 
-export default DataGridDemo;
+export default DataGrid;

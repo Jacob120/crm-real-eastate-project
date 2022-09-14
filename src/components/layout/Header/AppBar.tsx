@@ -14,8 +14,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import Button from '@mui/material/Button';
 import HomeOutlinedIcon from '@material-ui/icons/HomeOutlined';
 import PeopleAltOutlinedIcon from '@material-ui/icons/PeopleAltOutlined';
@@ -104,7 +102,7 @@ const AppBarDrawer = () => {
               component='div'
               sx={{ flexGrow: 1 }}
             >
-              Spółdzielnia Mieszkaniowa - Projekt
+              Spółdzielnia Mieszkaniowa - Projekttttt
             </Typography>
             <Button color='inherit'>Zaloguj</Button>
           </Toolbar>
@@ -115,9 +113,6 @@ const AppBarDrawer = () => {
         open={open}
         sx={{
           '& .MuiDrawer-paper': { backgroundColor: '#1976d2' },
-          '& .Mui-selected': {
-            color: 'red',
-          },
           '& .MuiSvgIcon-root': { color: 'white' },
         }}
       >
@@ -174,3 +169,6 @@ const AppBarDrawer = () => {
 };
 
 export default AppBarDrawer;
+function useStyles() {
+  throw new Error('Function not implemented.');
+}
