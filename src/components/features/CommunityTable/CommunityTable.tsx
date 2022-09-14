@@ -118,7 +118,7 @@ const rows = [
   },
 ];
 
-const DataGridDemo = () => {
+const CommunityTable = () => {
   return (
     <Box
       sx={{
@@ -175,4 +175,4 @@ const DataGridDemo = () => {
   );
 };
 
-export default DataGridDemo;
+export default CommunityTable;
