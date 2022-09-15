@@ -102,9 +102,11 @@ const AppBarDrawer = () => {
               component='div'
               sx={{ flexGrow: 1 }}
             >
-              Spółdzielnia Mieszkaniowa - Projekttttt
+              Spółdzielnia Mieszkaniowa - Projekt
             </Typography>
-            <Button color='inherit'>Zaloguj</Button>
+            <Button color='inherit' onClick={() => navigate('/')}>
+              Zaloguj
+            </Button>
           </Toolbar>
         </AppBar>
       </Box>
