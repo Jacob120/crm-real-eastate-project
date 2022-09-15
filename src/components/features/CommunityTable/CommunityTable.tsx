@@ -131,7 +131,7 @@ const CommunityTable = () => {
           backgroundColor: '#e8e8e8',
         },
         '& .MuiDataGrid-columnSeparator--sideRight': {
-          color: '#808080',
+          color: '#888888',
         },
       }}
     >

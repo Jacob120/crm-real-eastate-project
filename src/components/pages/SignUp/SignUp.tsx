@@ -13,9 +13,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-const Home = () => {
-  const theme = createTheme();
+const theme = createTheme();
 
+const SignUp = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -24,6 +24,7 @@ const Home = () => {
       password: data.get('password'),
     });
   };
+
   return (
     <ThemeProvider theme={theme}>
       <Container component='main' maxWidth='xs'>
@@ -40,55 +41,70 @@ const Home = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component='h1' variant='h5'>
-            Zaloguj się
+            Zarejestruj się
           </Typography>
           <Box
             component='form'
-            onSubmit={handleSubmit}
             noValidate
-            sx={{ mt: 1 }}
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
           >
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              id='email'
-              label='Adres email'
-              name='email'
-              autoComplete='email'
-              autoFocus
-            />
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              name='password'
-              label='Hasło'
-              type='password'
-              id='password'
-              autoComplete='current-password'
-            />
-            <FormControlLabel
-              control={<Checkbox value='remember' color='primary' />}
-              label='Zapamiętaj mnie'
-            />
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete='given-name'
+                  name='firstName'
+                  required
+                  fullWidth
+                  id='firstName'
+                  label='Imię'
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id='lastName'
+                  label='Nazwisko'
+                  name='lastName'
+                  autoComplete='family-name'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id='email'
+                  label='Adres email'
+                  name='email'
+                  autoComplete='email'
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name='password'
+                  label='Hasło'
+                  type='password'
+                  id='password'
+                  autoComplete='new-password'
+                />
+              </Grid>
+            </Grid>
             <Button
               type='submit'
               fullWidth
               variant='contained'
               sx={{ mt: 3, mb: 2 }}
             >
-              Zaloguj
+              Rejestracja
             </Button>
-            <Grid container>
-              <Grid item xs>
-                <Link href='#' variant='body2'>
-                  Zapomniałeś hasła?
-                </Link>
-              </Grid>
+            <Grid container justifyContent='flex-end'>
               <Grid item>
-                <Link href='/signup' variant='body2'>
-                  {'Nie masz konta? Zarejestruj się'}
+                <Link href='#' variant='body2'>
+                  Masz już konto? Zaloguj się
                 </Link>
               </Grid>
             </Grid>
@@ -99,4 +115,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default SignUp;
