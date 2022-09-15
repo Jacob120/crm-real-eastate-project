@@ -9,6 +9,7 @@ import Resolutions from './components/pages/Resolutions/Resolutions';
 import NotFound from './components/pages/NotFound/NotFound';
 import Utilities from './components/pages/Utilities/Utilities';
 import { Routes, Route } from 'react-router-dom';
+import SignUp from './components/pages/SignUp/SignUp';
 
 const App = () => {
   return (
@@ -23,6 +24,7 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/resolutions' element={<Resolutions />} />
           <Route path='/utilities' element={<Utilities />} />
+          <Route path='/signup' element={<SignUp />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Container>
