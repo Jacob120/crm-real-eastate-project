@@ -1,8 +1,8 @@
 import React from 'react';
-import DataGridDemo from '../../features/CommunityTable/CommunityTable';
+import CommunityTable from '../../features/CommunityTable/CommunityTable';
 
 const Community = () => {
-  return <DataGridDemo />;
+  return <CommunityTable />;
 };
 
 export default Community;
