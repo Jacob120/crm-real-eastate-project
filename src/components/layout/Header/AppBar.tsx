@@ -171,6 +171,3 @@ const AppBarDrawer = () => {
 };
 
 export default AppBarDrawer;
-function useStyles() {
-  throw new Error('Function not implemented.');
-}
