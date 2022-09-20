@@ -10,6 +10,7 @@ import NotFound from './components/pages/NotFound/NotFound';
 import Utilities from './components/pages/Utilities/Utilities';
 import { Routes, Route } from 'react-router-dom';
 import SignUp from './components/pages/SignUp/SignUp';
+import Accounting from './components/pages/Accounting/Accounting';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path='/resolutions' element={<Resolutions />} />
           <Route path='/utilities' element={<Utilities />} />
           <Route path='/signup' element={<SignUp />} />
+          <Route path='/accounting' element={<Accounting/>}/>
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Container>

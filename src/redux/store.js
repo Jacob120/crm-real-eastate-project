@@ -1,10 +1,11 @@
 import { createStore, combineReducers } from 'redux';
-import categoriesReducer from './categoriesRedux';
 import initialState from './initialState';
-import postsReducer from './postsRedux';
+import accountingReducer from './accountingRedux';
+
 
 const subreducers = {
-  drawerCategories: drawerReducer,
+  // adminDrawerCategories: drawerReducer,
+  accountingData: accountingReducer,
 };
 
 const reducer = combineReducers(subreducers);
