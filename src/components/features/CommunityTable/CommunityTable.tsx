@@ -1,124 +1,89 @@
-import * as React from 'react';
+import { useSelector } from 'react-redux';
+
 import Box from '@mui/material/Box';
 import {
   GridToolbar,
   GridColDef,
   GridValueGetterParams,
+  GridRenderCellParams,
+  GridRowCount,
+  GridApi,
 } from '@mui/x-data-grid';
+import Skeleton from '@mui/material/Skeleton';
 import { Typography } from '@material-ui/core';
 import { StripedDataGrid } from './CommunityTable.styles';
 import { Button } from '@mui/material';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
+import { getAllOwners, loadOwnersRequest } from '../../../redux/ownersReducer';
+import { useEffect } from 'react';
+import { useAppDispatch } from '../../../redux/hooks';
 
 const columns: GridColDef[] = [
   {
-    field: 'Lp',
+    field: 'ordinalNumber',
     headerName: 'Lp.',
     width: 60,
     headerClassName: 'column-header',
+    valueGetter: (params: GridValueGetterParams) =>
+      params.api.getRowIndex(params.row.id) + 1,
   },
   {
-    field: 'owner',
+    field: 'personalData',
     headerName: 'Właściciel',
     width: 200,
     editable: true,
     headerClassName: 'column-header',
   },
   {
-    field: 'mailingAddress',
+    field: 'addressToInvoice',
     headerName: 'Adres do korespondencji',
     width: 270,
     editable: true,
     headerClassName: 'column-header',
   },
   {
-    field: 'billingInformation',
+    field: 'dataToInvoice',
     headerName: 'Dane do faktur',
     width: 270,
     editable: true,
     headerClassName: 'column-header',
   },
   {
-    field: 'apartmentAddress',
+    field: 'forwardingAddress',
     headerName: 'Adres lokalu',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
     width: 300,
     headerClassName: 'column-header',
 
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.owner || ''} ${params.row.mailingAddress || ''}`,
-  },
-];
-
-const rows = [
-  {
-    id: 1,
-    Lp: 1,
-    owner: 'Jon Snow',
-    mailingAddress: 'Jon Snow, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Jon Snow',
+    // valueGetter: (params: GridValueGetterParams) =>
+    //   `${params.row.owner || ''} ${params.row.forwardingAddress || ''}`,
   },
   {
-    id: 2,
-    Lp: 2,
-    owner: 'Cersei Lannister',
-    mailingAddress: 'Cersei Lannister, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Cersein Lannister',
-  },
-  {
-    id: 3,
-    Lp: 3,
-    owner: 'Jaime Lannister',
-    mailingAddress: 'Jaimie Lannister Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Haimie Lannister',
-  },
-  {
-    id: 4,
-    Lp: 4,
-    owner: 'Arya Stark',
-    mailingAddress: 'Arya Stark, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Arya Stark',
-  },
-  {
-    id: 5,
-    Lp: 5,
-    owner: 'Daenerys Targaryen',
-    mailingAddress: 'Daenerys Targaryen, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Daenerys Targaryen',
-  },
-  {
-    id: 6,
-    Lp: 6,
-    owner: 'Melisandre',
-    mailingAddress: 'Melisandre, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Melisandre',
-  },
-  {
-    id: 7,
-    Lp: 7,
-    owner: 'Ferrara Clifford',
-    mailingAddress: 'Ferrara Clifford, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Ferrara Clifford',
-  },
-  {
-    id: 8,
-    Lp: 8,
-    owner: 'Rossini Frances',
-    mailingAddress: 'Rossini Frances, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Rossini Frances',
-  },
-  {
-    id: 9,
-    Lp: 9,
-    owner: 'Harvey Roxie',
-    mailingAddress: 'Roxie, Pokątna 4, 00-950 Warszawa',
-    billingInformation: 'Harvey Roxie',
+    field: 'options',
+    headerName: 'Opcje',
+    width: 230,
+    editable: true,
+    headerClassName: 'column-header',
   },
 ];
 
 const CommunityTable = () => {
+  const dispatch = useAppDispatch();
+
+  const rows = useSelector(getAllOwners);
+
+  console.log('data', rows);
+
+  useEffect(() => {
+    dispatch(loadOwnersRequest());
+  }, [dispatch]);
+
+  const handleGetRowId = (event: any) => {
+    return event.ownerId;
+  };
+
   return (
     <Box
       sx={{
@@ -148,29 +113,39 @@ const CommunityTable = () => {
         <RefreshOutlinedIcon />
         Odśwież listę
       </Button>
-      <StripedDataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={20}
-        rowsPerPageOptions={[10]}
-        checkboxSelection
-        disableSelectionOnClick
-        experimentalFeatures={{ newEditingApi: true }}
-        getRowHeight={() => 'auto'}
-        getRowClassName={(params) =>
-          params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-        }
-        components={{ Toolbar: GridToolbar }}
-        sx={{
-          '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
-          '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
-            py: '15px',
-          },
-          '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': {
-            py: '22px',
-          },
-        }}
-      />
+      {rows ? (
+        <StripedDataGrid
+          getRowId={handleGetRowId}
+          rows={rows}
+          columns={columns}
+          pageSize={20}
+          rowsPerPageOptions={[10]}
+          checkboxSelection
+          disableSelectionOnClick
+          experimentalFeatures={{ newEditingApi: true }}
+          getRowHeight={() => 'auto'}
+          getRowClassName={(params) =>
+            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+          }
+          components={{ Toolbar: GridToolbar }}
+          sx={{
+            '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
+              py: '8px',
+            },
+            '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': {
+              py: '15px',
+            },
+            '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': {
+              py: '22px',
+            },
+          }}
+        />
+      ) : (
+        <Box sx={{ pt: 0.5 }}>
+          <Skeleton />
+          <Skeleton width='60%' />
+        </Box>
+      )}
     </Box>
   );
 };

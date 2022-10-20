@@ -15,7 +15,7 @@ const App = () => {
   return (
     <main>
       <AppBar />
-      <Container>
+      <Container maxWidth={false} sx={{ width: '75%' }}>
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='/community' element={<Community />} />
