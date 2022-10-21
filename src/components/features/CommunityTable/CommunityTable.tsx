@@ -1,88 +1,88 @@
 import { useSelector } from 'react-redux';
-
 import Box from '@mui/material/Box';
-import {
-  GridToolbar,
-  GridColDef,
-  GridValueGetterParams,
-  GridRenderCellParams,
-  GridRowCount,
-  GridApi,
-} from '@mui/x-data-grid';
-import Skeleton from '@mui/material/Skeleton';
+import { GridToolbar, GridActionsCellItem, GridRowId } from '@mui/x-data-grid';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { Typography } from '@material-ui/core';
 import { StripedDataGrid } from './CommunityTable.styles';
 import { Button } from '@mui/material';
 import NoteAddOutlinedIcon from '@mui/icons-material/NoteAddOutlined';
 import RefreshOutlinedIcon from '@mui/icons-material/RefreshOutlined';
-import { getAllOwners, loadOwnersRequest } from '../../../redux/ownersReducer';
-import { useEffect } from 'react';
+import {
+  getAllOwners,
+  loadOwnersRequest,
+  removeOwnerRequest,
+} from '../../../redux/ownersReducer';
+import { useEffect, useCallback } from 'react';
 import { useAppDispatch } from '../../../redux/hooks';
-
-const columns: GridColDef[] = [
-  {
-    field: 'ordinalNumber',
-    headerName: 'Lp.',
-    width: 60,
-    headerClassName: 'column-header',
-    valueGetter: (params: GridValueGetterParams) =>
-      params.api.getRowIndex(params.row.id) + 1,
-  },
-  {
-    field: 'personalData',
-    headerName: 'Właściciel',
-    width: 200,
-    editable: true,
-    headerClassName: 'column-header',
-  },
-  {
-    field: 'addressToInvoice',
-    headerName: 'Adres do korespondencji',
-    width: 270,
-    editable: true,
-    headerClassName: 'column-header',
-  },
-  {
-    field: 'dataToInvoice',
-    headerName: 'Dane do faktur',
-    width: 270,
-    editable: true,
-    headerClassName: 'column-header',
-  },
-  {
-    field: 'forwardingAddress',
-    headerName: 'Adres lokalu',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 300,
-    headerClassName: 'column-header',
-
-    // valueGetter: (params: GridValueGetterParams) =>
-    //   `${params.row.owner || ''} ${params.row.forwardingAddress || ''}`,
-  },
-  {
-    field: 'options',
-    headerName: 'Opcje',
-    width: 230,
-    editable: true,
-    headerClassName: 'column-header',
-  },
-];
+import GridSkeleton from '../../common/GridSkeleton/GridSkeleton';
 
 const CommunityTable = () => {
   const dispatch = useAppDispatch();
 
-  const rows = useSelector(getAllOwners);
-
-  console.log('data', rows);
+  const data = useSelector(getAllOwners);
 
   useEffect(() => {
     dispatch(loadOwnersRequest());
   }, [dispatch]);
 
-  const handleGetRowId = (event: any) => {
-    return event.ownerId;
-  };
+  const deleteUser = useCallback(
+    (id: GridRowId) => () => {
+      dispatch(removeOwnerRequest(id));
+    },
+    [dispatch]
+  );
+
+  const columns = [
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 60,
+      headerClassName: 'column-header',
+    },
+    {
+      field: 'personalData',
+      headerName: 'Właściciel',
+      width: 200,
+      editable: false,
+      headerClassName: 'column-header',
+    },
+    {
+      field: 'addressToInvoice',
+      headerName: 'Adres do korespondencji',
+      width: 270,
+      editable: false,
+      headerClassName: 'column-header',
+    },
+    {
+      field: 'dataToInvoice',
+      headerName: 'Dane do faktur',
+      width: 270,
+      editable: false,
+      headerClassName: 'column-header',
+    },
+    {
+      field: 'forwardingAddress',
+      headerName: 'Adres lokalu',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      width: 300,
+      headerClassName: 'column-header',
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Opcje',
+      width: 230,
+      headerClassName: 'column-header',
+      getActions: (params: { id: GridRowId }) => [
+        <GridActionsCellItem
+          icon={<DeleteIcon />}
+          label='Delete'
+          onClick={deleteUser(params.id)}
+        />,
+      ],
+    },
+  ];
 
   return (
     <Box
@@ -113,20 +113,19 @@ const CommunityTable = () => {
         <RefreshOutlinedIcon />
         Odśwież listę
       </Button>
-      {rows ? (
+      {data ? (
         <StripedDataGrid
-          getRowId={handleGetRowId}
-          rows={rows}
+          rows={data}
           columns={columns}
           pageSize={20}
-          rowsPerPageOptions={[10]}
+          rowsPerPageOptions={[20]}
           checkboxSelection
           disableSelectionOnClick
-          experimentalFeatures={{ newEditingApi: true }}
           getRowHeight={() => 'auto'}
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
           }
+          getRowId={(row) => row.ownerId}
           components={{ Toolbar: GridToolbar }}
           sx={{
             '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': {
@@ -141,10 +140,7 @@ const CommunityTable = () => {
           }}
         />
       ) : (
-        <Box sx={{ pt: 0.5 }}>
-          <Skeleton />
-          <Skeleton width='60%' />
-        </Box>
+        <GridSkeleton />
       )}
     </Box>
   );

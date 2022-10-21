@@ -1,5 +1,6 @@
 import initialState from './initialState';
 import axios from 'axios';
+import { API_URL } from '../config';
 
 // selectors
 export const getAllOwners = ({ owners }) => owners.data;
@@ -9,6 +10,7 @@ export const getRequest = ({ owners }) => owners.request;
 const createActionName = (actionName) => `app/owners/${actionName}`;
 const LOAD_OWNERS = createActionName('LOAD_OWNERS');
 const ADD_OWNER = createActionName('ADD_OWNER');
+const REMOVE_OWNER = createActionName('REMOVE_OWNER');
 
 const START_REQUEST = createActionName('START_REQUEST');
 const END_REQUEST = createActionName('END_REQUEST');
@@ -16,26 +18,38 @@ const ERROR_REQUEST = createActionName('ERROR_REQUEST');
 
 // action creators
 export const loadOwners = (payload) => ({ payload, type: LOAD_OWNERS });
+export const removeOwner = (payload) => ({ payload, type: REMOVE_OWNER });
 
 export const startRequest = () => ({ type: START_REQUEST });
 export const endRequest = () => ({ type: END_REQUEST });
 export const errorRequest = (error) => ({ error, type: ERROR_REQUEST });
 
-export const loadOwnersRequest = (id) => {
+export const loadOwnersRequest = () => {
   return async (dispatch) => {
     dispatch(startRequest());
 
     try {
-      let res = await axios.get(
-        `https://crm-real-estate-manager.herokuapp.com/v1/owners`
-      );
+      let res = await axios.get(`${API_URL}/owners`);
       await new Promise((resolve, reject) => setTimeout(resolve, 1000));
 
       dispatch(loadOwners(res.data));
       console.log(res.data);
       dispatch(endRequest());
-    } catch (e) {
-      dispatch(errorRequest(e.message));
+    } catch (err) {
+      dispatch(errorRequest(err.message));
+    }
+  };
+};
+
+export const removeOwnerRequest = (id) => {
+  return async (dispatch) => {
+    dispatch(startRequest());
+
+    try {
+      await axios.delete(`${API_URL}/owners/${id}`);
+      dispatch(removeOwner(id));
+    } catch (err) {
+      dispatch(errorRequest(err.message));
     }
   };
 };
@@ -58,6 +72,8 @@ const ownersReducer = (statePart = initialState, action = {}) => {
         request: { pending: false, error: action.error, success: false },
       };
     case LOAD_OWNERS:
+      return { ...statePart, data: action.payload };
+    case REMOVE_OWNER:
       return { ...statePart, data: action.payload };
     default:
       return statePart;
