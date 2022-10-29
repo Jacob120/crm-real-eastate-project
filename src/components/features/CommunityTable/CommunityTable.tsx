@@ -15,6 +15,7 @@ import {
 import { useEffect, useCallback } from 'react';
 import { useAppDispatch } from '../../../redux/hooks';
 import GridSkeleton from '../../common/GridSkeleton/GridSkeleton';
+import AddOwnerDialog from '../../common/ModalAddOwner/ModalAddOwner';
 
 const CommunityTable = () => {
   const dispatch = useAppDispatch();
@@ -25,7 +26,7 @@ const CommunityTable = () => {
     dispatch(loadOwnersRequest());
   }, [dispatch]);
 
-  const deleteUser = useCallback(
+  const deleteOwner = useCallback(
     (id: GridRowId) => () => {
       dispatch(removeOwnerRequest(id));
     },
@@ -78,7 +79,7 @@ const CommunityTable = () => {
         <GridActionsCellItem
           icon={<DeleteIcon />}
           label='Delete'
-          onClick={deleteUser(params.id)}
+          onClick={deleteOwner(params.id)}
         />,
       ],
     },
@@ -105,10 +106,7 @@ const CommunityTable = () => {
           Właściciele we wspólnocie
         </Typography>
       </Box>
-      <Button>
-        <NoteAddOutlinedIcon />
-        Dodaj właściciela
-      </Button>
+      <AddOwnerDialog />
       <Button>
         <RefreshOutlinedIcon />
         Odśwież listę

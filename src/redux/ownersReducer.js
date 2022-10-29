@@ -18,6 +18,7 @@ const ERROR_REQUEST = createActionName('ERROR_REQUEST');
 
 // action creators
 export const loadOwners = (payload) => ({ payload, type: LOAD_OWNERS });
+export const addOwner = (payload) => ({ payload, type: ADD_OWNER });
 export const removeOwner = (payload) => ({ payload, type: REMOVE_OWNER });
 
 export const startRequest = () => ({ type: START_REQUEST });
@@ -30,10 +31,31 @@ export const loadOwnersRequest = () => {
 
     try {
       let res = await axios.get(`${API_URL}/owners`);
-      await new Promise((resolve, reject) => setTimeout(resolve, 1000));
 
       dispatch(loadOwners(res.data));
       console.log(res.data);
+      dispatch(endRequest());
+    } catch (err) {
+      dispatch(errorRequest(err.message));
+    }
+  };
+};
+
+export const addOwnerRequest = (owner) => {
+  const { personalData, forwardingAddress, dataToInvoice, addressToInvoice } =
+    owner;
+  console.log('add request', owner);
+  const ownerData = {
+    personalData,
+    forwardingAddress,
+    dataToInvoice,
+    addressToInvoice,
+  };
+  return async (dispatch) => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.post(`${API_URL}/owner/`, ownerData);
+      dispatch(addOwner(res.data));
       dispatch(endRequest());
     } catch (err) {
       dispatch(errorRequest(err.message));
@@ -72,6 +94,8 @@ const ownersReducer = (statePart = initialState, action = {}) => {
         request: { pending: false, error: action.error, success: false },
       };
     case LOAD_OWNERS:
+      return { ...statePart, data: action.payload };
+    case ADD_OWNER:
       return { ...statePart, data: action.payload };
     case REMOVE_OWNER:
       return { ...statePart, data: action.payload };
